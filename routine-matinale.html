@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Routine Matinale — Mobilité · Gainage · Grand Écart</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #F7F2E9;
+      --sand: #EDE4D3;
+      --sandDark: #D9CCBA;
+      --sage: #6B8C6E;
+      --sageMid: #8AAD8D;
+      --sagePale: #C8D9C4;
+      --terracotta: #A0614A;
+      --terracottaPale: #E8C4B4;
+      --umber: #5C3D2E;
+      --warmGrey: #9A8F82;
+      --text: #2C2117;
+      --textSoft: #6B5A4A;
+    }
+
+    body {
+      background: var(--cream);
+      font-family: 'Georgia', serif;
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: linear-gradient(160deg, var(--sagePale) 0%, var(--sand) 60%, var(--terracottaPale) 100%);
+      padding: 48px 32px 40px;
+      text-align: center;
+      border-bottom: 1px solid var(--sandDark);
+    }
+    .header-sup {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--warmGrey);
+      margin-bottom: 12px;
+    }
+    .header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(28px, 5vw, 48px);
+      font-weight: 600;
+      color: var(--umber);
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+    .header-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(16px, 2.5vw, 20px);
+      color: var(--warmGrey);
+    }
+    .hydration-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,0.55);
+      backdrop-filter: blur(8px);
+      border-radius: 40px;
+      padding: 10px 22px;
+      margin-top: 24px;
+      border: 1px solid rgba(255,255,255,0.7);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: var(--textSoft);
+    }
+    .hydration-chip span:first-child { font-size: 16px; }
+
+    /* ── PHASE SELECTOR ── */
+    .phase-selector {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      padding: 28px 24px 0;
+      flex-wrap: wrap;
+    }
+    .phase-btn {
+      border-radius: 40px;
+      padding: 10px 24px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.22s ease;
+      background: var(--sand);
+      color: var(--textSoft);
+      border: 1.5px solid var(--sandDark);
+      box-shadow: none;
+    }
+    .phase-btn:hover { filter: brightness(0.94); }
+    .phase-btn .num { opacity: 0.6; font-size: 10px; margin-right: 6px; }
+    .phase-btn .dur {
+      display: inline-block;
+      margin-left: 8px;
+      font-size: 10px;
+      background: var(--sandDark);
+      border-radius: 12px;
+      padding: 2px 8px;
+      color: var(--warmGrey);
+    }
+    .phase-btn.active { color: #fff; }
+    .phase-btn.active .dur { background: rgba(255,255,255,0.22); color: #fff; }
+
+    /* ── EXERCISE CARDS ── */
+    .cards-container {
+      padding: 24px 24px 0;
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .exo-card {
+      background: #fff;
+      border-radius: 20px;
+      border: 1px solid var(--sandDark);
+      box-shadow: 0 2px 10px rgba(92,61,46,0.06);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      transition: box-shadow 0.2s;
+    }
+    .exo-card:hover { box-shadow: 0 4px 20px rgba(92,61,46,0.1); }
+
+    .exo-left { padding: 22px 24px; }
+    .exo-tag-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .exo-phase-badge {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border-radius: 20px;
+      padding: 3px 10px;
+    }
+    .exo-meta {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      color: var(--warmGrey);
+    }
+    .exo-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(17px, 2.2vw, 21px);
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+    .exo-info-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .info-box {
+      border-radius: 12px;
+      padding: 9px 14px;
+      flex: 1 1 180px;
+    }
+    .info-box .info-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 4px;
+    }
+    .info-box .info-val {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: var(--text);
+    }
+    .info-resp { background: var(--sand); }
+    .info-resp .info-label { color: var(--warmGrey); }
+    .info-err {
+      background: #FBF0EA;
+      border: 1px solid var(--terracottaPale);
+    }
+    .info-err .info-label { color: var(--terracotta); }
+
+    /* ── ANIMATION PANEL ── */
+    .exo-right {
+      background: var(--sand);
+      border-left: 1px solid var(--sandDark);
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 180px;
+    }
+    .anim-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .anim-frame {
+      background: var(--cream);
+      border-radius: 16px;
+      padding: 10px 14px;
+      border: 1px solid var(--sandDark);
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.04);
+      line-height: 0;
+    }
+    .anim-btn {
+      background: var(--sage);
+      color: #fff;
+      border: none;
+      border-radius: 24px;
+      padding: 6px 18px;
+      font-size: 11px;
+      cursor: pointer;
+      letter-spacing: 0.6px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      transition: background 0.25s;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+    }
+    .anim-btn.playing { background: var(--terracotta); }
+
+    /* ── PROGRESSION ── */
+    .prog-section {
+      padding: 24px 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .prog-card {
+      background: #fff;
+      border-radius: 20px;
+      border: 1px solid var(--sandDark);
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(92,61,46,0.06);
+    }
+    .prog-header-btn {
+      width: 100%;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 20px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .prog-header-btn:hover { background: rgba(0,0,0,0.01); }
+    .prog-title-block { text-align: left; }
+    .prog-sup {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--warmGrey);
+      margin-bottom: 4px;
+    }
+    .prog-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .prog-chevron {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--sand);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: var(--warmGrey);
+      transition: transform 0.3s;
+      flex-shrink: 0;
+    }
+    .prog-chevron.open { transform: rotate(180deg); }
+
+    .prog-body { border-top: 1px solid var(--sandDark); display: none; }
+    .prog-body.visible { display: block; }
+    .prog-row {
+      display: grid;
+      grid-template-columns: 120px 1fr 2fr;
+      padding: 16px 24px;
+      gap: 16px;
+      align-items: center;
+      transition: background 0.15s;
+    }
+    .prog-row + .prog-row { border-top: 1px solid var(--sand); }
+    .prog-row:hover { background: var(--sand); }
+    .prog-sem {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--sage);
+      letter-spacing: 0.3px;
+    }
+    .prog-focus {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+    }
+    .prog-detail {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: var(--textSoft);
+    }
+
+    .safety-note {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      color: var(--warmGrey);
+      text-align: center;
+      margin-top: 20px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 640px) {
+      .exo-card { grid-template-columns: 1fr; }
+      .exo-right {
+        border-left: none;
+        border-top: 1px solid var(--sandDark);
+        min-width: unset;
+      }
+      .prog-row { grid-template-columns: 1fr; gap: 4px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <p class="header-sup">Intermédiaire · 10–15 min · Tapis + Chaise</p>
+    <h1>Routine Matinale</h1>
+    <p class="header-sub">Mobilité · Gainage · Grand Écart</p>
+    <div class="hydration-chip">
+      <span>💧</span>
+      <span>200–300 ml eau tiède + 3 respirations profondes avant de commencer</span>
+    </div>
+  </div>
+
+  <!-- PHASE SELECTOR -->
+  <div class="phase-selector">
+    <button class="phase-btn active" data-phase="p1" style="background:#6B8C6E;border-color:#6B8C6E;box-shadow:0 4px 14px #6B8C6E40;">
+      <span class="num">01</span>Déverrouillage<span class="dur">2–3 min</span>
+    </button>
+    <button class="phase-btn" data-phase="p2">
+      <span class="num">02</span>Gainage Core<span class="dur">3–4 min</span>
+    </button>
+    <button class="phase-btn" data-phase="p3">
+      <span class="num">03</span>Grand Écart<span class="dur">5–6 min</span>
+    </button>
+  </div>
+
+  <!-- EXERCISE CARDS -->
+  <div class="cards-container" id="cards-container"></div>
+
+  <!-- PROGRESSION -->
+  <div class="prog-section">
+    <div class="prog-card">
+      <button class="prog-header-btn" id="prog-toggle">
+        <div class="prog-title-block">
+          <p class="prog-sup">Plan sur 4 semaines</p>
+          <h3 class="prog-title">Progression</h3>
+        </div>
+        <span class="prog-chevron" id="prog-chevron">▾</span>
+      </button>
+      <div class="prog-body" id="prog-body">
+        <div class="prog-row">
+          <span class="prog-sem">Sem. 1–2</span>
+          <span class="prog-focus">Installer la routine</span>
+          <span class="prog-detail">Respecte les durées. Technique avant amplitude.</span>
+        </div>
+        <div class="prog-row">
+          <span class="prog-sem">Sem. 3</span>
+          <span class="prog-focus">Allonger les maintiens</span>
+          <span class="prog-detail">45 → 60 sec sur les étirements. +1 série de gainage.</span>
+        </div>
+        <div class="prog-row">
+          <span class="prog-sem">Sem. 4</span>
+          <span class="prog-focus">Augmenter l'amplitude</span>
+          <span class="prog-detail">+2–3 cm au demi grand écart. Grand écart sans chaise 10 sec.</span>
+        </div>
+        <div class="prog-row">
+          <span class="prog-sem">Mois 2+</span>
+          <span class="prog-focus">Grand écart complet</span>
+          <span class="prog-detail">Frontal assisté + latéral avec blocs.</span>
+        </div>
+      </div>
+    </div>
+    <p class="safety-note">⚠️ Douleur vive = arrêt immédiat · Inconfort profond ≠ douleur aiguë · Régularité &gt; intensité</p>
+  </div>
+
+  <script>
+    /* ── THEME ── */
+    const theme = {
+      cream: "#F7F2E9", sand: "#EDE4D3", sandDark: "#D9CCBA",
+      sage: "#6B8C6E", sageMid: "#8AAD8D", sagePale: "#C8D9C4",
+      terracotta: "#A0614A", terracottaPale: "#E8C4B4",
+      umber: "#5C3D2E", warmGrey: "#9A8F82", text: "#2C2117", textSoft: "#6B5A4A",
+    };
+
+    /* ── SVG FRAMES ── */
+    function svgFrames(key) {
+      const s = theme.sage, t = theme.terracotta, wg = theme.warmGrey, sd = theme.sandDark;
+      const figures = {
+        "Rotation chevilles & poignets": [
+          `<svg viewBox="0 0 100 140" width="100" height="140">
+            <circle cx="50" cy="22" r="10" fill="none" stroke="${s}" stroke-width="2.2"/>
+            <line x1="50" y1="32" x2="50" y2="78" stroke="${s}" stroke-width="2.2"/>
+            <line x1="50" y1="48" x2="28" y2="62" stroke="${s}" stroke-width="2.2"/>
+            <line x1="50" y1="48" x2="72" y2="62" stroke="${s}" stroke-width="2.2"/>
+            <line x1="50" y1="78" x2="38" y2="110" stroke="${s}" stroke-width="2.2"/>
+            <line x1="50" y1="78" x2="62" y2="110" stroke="${s}" stroke-width="2.2"/>
+            <circle cx="38" cy="113" r="5" fill="none" stroke="${t}" stroke-width="1.8" stroke-dasharray="3 2"/>
+            <circle cx="74" cy="62" r="5" fill="none" stroke="${t}" stroke-width="1.8" stroke-dasharray="3 2"/>
+            <text x="50" y="132" text-anchor="middle" font-size="8" fill="${wg}" font-family="sans-serif">→ rotation</text>
+          </svg>`,
+          `<svg viewBox="0 0 100 140" width="100" height="140">
+            <circle cx="50" cy="22" r="10" fill="none" stroke="${s}" stroke-width="2.2"/>
+            <line x1="50" y1="32" x2="50" y2="78" stroke="${s}" stroke-width="2.2"/>
+            <line x1="50" y1="48" x2="26" y2="58" stroke="${s}" stroke-width="2.2"/>
+            <line x1="50" y1="48" x2="74" y2="58" stroke="${s}" stroke-width="2.2"/>
+            <line x1="50" y1="78" x2="36" y2="108" stroke="${s}" stroke-width="2.2"/>
+            <line x1="50" y1="78" x2="64" y2="108" stroke="${s}" stroke-width="2.2"/>
+            <circle cx="36" cy="113" r="5" fill="none" stroke="${t}" stroke-width="1.8" stroke-dasharray="2 3"/>
+            <circle cx="76" cy="58" r="5" fill="none" stroke="${t}" stroke-width="1.8" stroke-dasharray="2 3"/>
+            <text x="50" y="132" text-anchor="middle" font-size="8" fill="${wg}" font-family="sans-serif">← rotation</text>
+          </svg>`
+        ],
+        "Cercles de hanches": [
+          `<svg viewBox="0 0 100 140" width="100" height="140">
+            <circle cx="50" cy="20" r="10" fill="none" stroke="${s}" stroke-width="2.2"/>
+            <line x1="50" y1="30" x2="50" y2="75" stroke="${s}" stroke-width="2.2"/>
+            <line x1="50" y1="44" x2="30" y2="56" stroke="${s}" stroke-width="2.2"/>
+            <line x1="30" y1="56" x2="34" y2="70" stroke="${s}" stroke-width="2"/>
+            <line x1="50" y1="44" x2="70" y2="56" stroke="${s}" stroke-width="2.2"/>
+            <line x1="70" y1="56" x2="66" y2="70" stroke="${s}" stroke-width="2"/>
+            <line x1="50" y1="75" x2="40" y2="112" stroke="${s}" stroke-width="2.2"/>
+            <line x1="50" y1="75" x2="60" y2="112" stroke="${s}" stroke-width="2.2"/>
+            <ellipse cx="50" cy="75" rx="15" ry="7" fill="none" stroke="${t}" stroke-width="1.5" stroke-dasharray="4 2" opacity="0.7"/>
+            <circle cx="35" cy="75" r="3" fill="${t}" opacity="0.8"/>
+            <text x="50" y="130" text-anchor="middle" font-size="8" fill="${wg}" font-family="sans-serif">hanche gauche</text>
+          </svg>`,
+          `<svg viewBox="0 0 100 140" width="100" height="140">
+            <circle cx="50" cy="20" r="10" fill="none" stroke="${s}" stroke-width="2.2"/>
+            <line x1="50" y1="30" x2="52" y2="75" stroke="${s}" stroke-width="2.2"/>
+            <line x1="50" y1="44" x2="30" y2="54" stroke="${s}" stroke-width="2.2"/>
+            <line x1="30" y1="54" x2="32" y2="68" stroke="${s}" stroke-width="2"/>
+            <line x1="50" y1="44" x2="70" y2="54" stroke="${s}" stroke-width="2.2"/>
+            <line x1="70" y1="54" x2="68" y2="68" stroke="${s}" stroke-width="2"/>
+            <line x1="52" y1="75" x2="40" y2="112" stroke="${s}" stroke-width="2.2"/>
+            <line x1="52" y1="75" x2="62" y2="112" stroke="${s}" stroke-width="2.2"/>
+            <ellipse cx="50" cy="75" rx="15" ry="7" fill="none" stroke="${t}" stroke-width="1.5" stroke-dasharray="4 2" opacity="0.7"/>
+            <circle cx="65" cy="75" r="3" fill="${t}" opacity="0.8"/>
+            <text x="50" y="130" text-anchor="middle" font-size="8" fill="${wg}" font-family="sans-serif">hanche droite</text>
+          </svg>`
+        ],
+        "Chat-Vache": [
+          `<svg viewBox="0 0 130 110" width="130" height="110">
+            <path d="M22 65 Q65 35 108 65" fill="none" stroke="${s}" stroke-width="2.5"/>
+            <line x1="22" y1="65" x2="22" y2="92" stroke="${s}" stroke-width="2.2"/>
+            <line x1="108" y1="65" x2="108" y2="92" stroke="${s}" stroke-width="2.2"/>
+            <line x1="22" y1="76" x2="6" y2="92" stroke="${s}" stroke-width="2.2"/>
+            <line x1="108" y1="76" x2="124" y2="92" stroke="${s}" stroke-width="2.2"/>
+            <circle cx="108" cy="54" r="9" fill="none" stroke="${s}" stroke-width="2.2"/>
+            <text x="65" y="106" text-anchor="middle" font-size="8.5" fill="${t}" font-family="sans-serif" font-weight="600">CHAT — expire, dos rond</text>
+          </svg>`,
+          `<svg viewBox="0 0 130 110" width="130" height="110">
+            <path d="M22 58 Q65 78 108 58" fill="none" stroke="${s}" stroke-width="2.5"/>
+            <line x1="22" y1="58" x2="22" y2="88" stroke="${s}" stroke-width="2.2"/>
+            <line x1="108" y1="58" x2="108" y2="88" stroke="${s}" stroke-width="2.2"/>
+            <line x1="22" y1="70" x2="6" y2="88" stroke="${s}" stroke-width="2.2"/>
+            <line x1="108" y1="70" x2="124" y2="88" stroke="${s}" stroke-width="2.2"/>
+            <circle cx="108" cy="46" r="9" fill="none" stroke="${s}" stroke-width="2.2"/>
+            <text x="65" y="106" text-anchor="middle" font-size="8.5" fill="${s}" font-family="sans-serif" font-weight="600">VACHE — inspire, dos creux</text>
+          </svg>`
+        ],
+        "Dead Bug": [
+          `<svg viewBox="0 0 150 110" width="150" height="110">
+            <line x1="10" y1="88" x2="140" y2="88" stroke="${sd}" stroke-width="1.5"/>
+            <ellipse cx="75" cy="56" rx="26" ry="11" fill="none" stroke="${s}" stroke-width="2.2"/>
+            <circle cx="75" cy="37" r="9" fill="none" stroke="${s}" stroke-width="2.2"/>
+            <line x1="60" y1="52" x2="38" y2="33" stroke="${s}" stroke-width="2.2"/>
+            <line x1="90" y1="52" x2="112" y2="33" stroke="${s}" stroke-width="2.2"/>
+            <line x1="66" y1="65" x2="52" y2="47" stroke="${s}" stroke-width="2.2"/>
+            <line x1="52" y1="47" x2="34" y2="56" stroke="${s}" stroke-width="2.2"/>
+            <line x1="84" y1="65" x2="98" y2="47" stroke="${s}" stroke-width="2.2"/>
+            <line x1="98" y1="47" x2="116" y2="56" stroke="${s}" stroke-width="2.2"/>
+            <text x="75" y="104" text-anchor="middle" font-size="8" fill="${wg}" font-family="sans-serif">position départ</text>
+          </svg>`,
+          `<svg viewBox="0 0 150 110" width="150" height="110">
+            <line x1="10" y1="88" x2="140" y2="88" stroke="${sd}" stroke-width="1.5"/>
+            <ellipse cx="75" cy="56" rx="26" ry="11" fill="none" stroke="${s}" stroke-width="2.2"/>
+            <circle cx="75" cy="37" r="9" fill="none" stroke="${s}" stroke-width="2.2"/>
+            <line x1="60" y1="52" x2="18" y2="52" stroke="${s}" stroke-width="2.2"/>
+            <line x1="90" y1="52" x2="112" y2="33" stroke="${s}" stroke-width="2.2"/>
+            <line x1="66" y1="65" x2="52" y2="47" stroke="${s}" stroke-width="2.2"/>
+            <line x1="52" y1="47" x2="34" y2="56" stroke="${s}" stroke-width="2.2"/>
+            <line x1="84" y1="65" x2="114" y2="84" stroke="${s}" stroke-width="2.2"/>
+            <text x="15" y="50" font-size="11" fill="${t}">←</text>
+            <text x="112" y="88" font-size="11" fill="${t}">↘</text>
+            <text x="75" y="104" text-anchor="middle" font-size="8" fill="${wg}" font-family="sans-serif">bras G + jambe D s'allongent</text>
+          </svg>`
+        ],
+        "Planche": [
+          `<svg viewBox="0 0 150 90" width="150" height="90">
+            <line x1="10" y1="76" x2="140" y2="76" stroke="${sd}" stroke-width="1.5"/>
+            <line x1="18" y1="68" x2="130" y2="56" stroke="${s}" stroke-width="2.8"/>
+            <circle cx="130" cy="46" r="9" fill="none" stroke="${s}" stroke-width="2.2"/>
+            <line x1="18" y1="68" x2="18" y2="76" stroke="${s}" stroke-width="2.2"/>
+            <line x1="30" y1="67" x2="30" y2="76" stroke="${s}" stroke-width="2.2"/>
+            <line x1="112" y1="58" x2="112" y2="76" stroke="${s}" stroke-width="2.2"/>
+            <line x1="130" y1="56" x2="135" y2="76" stroke="${s}" stroke-width="2.2"/>
+            <path d="M18 72 L130 50" stroke="${theme.sagePale}" stroke-width="1" stroke-dasharray="4 3"/>
+            <text x="75" y="88" text-anchor="middle" font-size="8" fill="${s}" font-family="sans-serif">corps aligné ✓</text>
+          </svg>`,
+          `<svg viewBox="0 0 150 90" width="150" height="90">
+            <line x1="10" y1="76" x2="140" y2="76" stroke="${sd}" stroke-width="1.5"/>
+            <path d="M18 68 Q75 80 130 56" fill="none" stroke="${t}" stroke-width="2.8" opacity="0.85"/>
+            <circle cx="130" cy="46" r="9" fill="none" stroke="${t}" stroke-width="2.2" opacity="0.85"/>
+            <line x1="18" y1="68" x2="18" y2="76" stroke="${t}" stroke-width="2.2" opacity="0.85"/>
+            <line x1="30" y1="67" x2="30" y2="76" stroke="${t}" stroke-width="2.2" opacity="0.85"/>
+            <line x1="112" y1="58" x2="112" y2="76" stroke="${t}" stroke-width="2.2" opacity="0.85"/>
+            <line x1="130" y1="56" x2="135" y2="76" stroke="${t}" stroke-width="2.2" opacity="0.85"/>
+            <text x="75" y="68" text-anchor="middle" font-size="13" fill="${t}">✕</text>
+            <text x="75" y="88" text-anchor="middle" font-size="8" fill="${t}" font-family="sans-serif">fesses trop hautes</text>
+          </svg>`
+        ],
+        "Pont fessier": [
+          `<svg viewBox="0 0 150 100" width="150" height="100">
+            <line x1="10" y1="88" x2="140" y2="88" stroke="${sd}" stroke-width="1.5"/>
+            <ellipse cx="75" cy="80" rx="26" ry="8" fill="none" stroke="${s}" stroke-width="2.2"/>
+            <circle cx="103" cy="70" r="9" fill="none" stroke="${s}" stroke-width="2.2"/>
+            <line x1="49" y1="83" x2="42" y2="88" stroke="${s}" stroke-width="2.2"/>
+            <line x1="101" y1="83" x2="112" y2="88" stroke="${s}" stroke-width="2.2"/>
+            <line x1="42" y1="88" x2="35" y2="88" stroke="${s}" stroke-width="2.2"/>
+            <line x1="112" y1="88" x2="120" y2="88" stroke="${s}" stroke-width="2.2"/>
+            <text x="75" y="100" text-anchor="middle" font-size="8" fill="${wg}" font-family="sans-serif">départ — pieds à plat</text>
+          </svg>`,
+          `<svg viewBox="0 0 150 100" width="150" height="100">
+            <line x1="10" y1="88" x2="140" y2="88" stroke="${sd}" stroke-width="1.5"/>
+            <path d="M42 88 L52 66 Q75 50 100 66 L110 88" fill="none" stroke="${s}" stroke-width="2.2"/>
+            <circle cx="102" cy="56" r="9" fill="none" stroke="${s}" stroke-width="2.2"/>
+            <line x1="42" y1="88" x2="35" y2="88" stroke="${s}" stroke-width="2.2"/>
+            <line x1="110" y1="88" x2="118" y2="88" stroke="${s}" stroke-width="2.2"/>
+            <text x="75" y="55" text-anchor="middle" font-size="13" fill="${t}">↑</text>
+            <text x="75" y="100" text-anchor="middle" font-size="8" fill="${wg}" font-family="sans-serif">maintien 30 sec</text>
+          </svg>`
+        ],
+        "Fente basse": [
+          `<svg viewBox="0 0 150 120" width="150" height="120">
+            <line x1="10" y1="108" x2="140" y2="108" stroke="${sd}" stroke-width="1.5"/>
+            <circle cx="82" cy="32" r="9" fill="none" stroke="${s}" stroke-width="2.2"/>
+            <line x1="82" y1="41" x2="80" y2="72" stroke="${s}" stroke-width="2.2"/>
+            <line x1="80" y1="72" x2="92" y2="52" stroke="${s}" stroke-width="2.2"/>
+            <line x1="80" y1="88" x2="32" y2="108" stroke="${s}" stroke-width="2.2"/>
+            <line x1="80" y1="72" x2="88" y2="44" stroke="${s}" stroke-width="2.2"/>
+            <line x1="74" y1="58" x2="58" y2="72" stroke="${s}" stroke-width="2.2"/>
+            <line x1="74" y1="58" x2="88" y2="72" stroke="${s}" stroke-width="2.2"/>
+            <text x="75" y="118" text-anchor="middle" font-size="8" fill="${wg}" font-family="sans-serif">hanche neutre</text>
+          </svg>`,
+          `<svg viewBox="0 0 150 120" width="150" height="120">
+            <line x1="10" y1="108" x2="140" y2="108" stroke="${sd}" stroke-width="1.5"/>
+            <circle cx="82" cy="30" r="9" fill="none" stroke="${s}" stroke-width="2.2"/>
+            <line x1="82" y1="39" x2="80" y2="70" stroke="${s}" stroke-width="2.2"/>
+            <line x1="80" y1="70" x2="94" y2="50" stroke="${s}" stroke-width="2.2"/>
+            <line x1="80" y1="86" x2="26" y2="108" stroke="${s}" stroke-width="2.2"/>
+            <line x1="80" y1="70" x2="86" y2="42" stroke="${s}" stroke-width="2.2"/>
+            <line x1="74" y1="56" x2="58" y2="70" stroke="${s}" stroke-width="2.2"/>
+            <line x1="74" y1="56" x2="88" y2="70" stroke="${s}" stroke-width="2.2"/>
+            <text x="55" y="95" font-size="13" fill="${t}">↓</text>
+            <text x="75" y="118" text-anchor="middle" font-size="8" fill="${wg}" font-family="sans-serif">expire → hanche descend</text>
+          </svg>`
+        ],
+        "Fente + rotation": [
+          `<svg viewBox="0 0 150 120" width="150" height="120">
+            <line x1="10" y1="108" x2="140" y2="108" stroke="${sd}" stroke-width="1.5"/>
+            <circle cx="82" cy="30" r="9" fill="none" stroke="${s}" stroke-width="2.2"/>
+            <line x1="82" y1="39" x2="80" y2="72" stroke="${s}" stroke-width="2.2"/>
+            <line x1="80" y1="72" x2="93" y2="52" stroke="${s}" stroke-width="2.2"/>
+            <line x1="80" y1="88" x2="30" y2="108" stroke="${s}" stroke-width="2.2"/>
+            <line x1="80" y1="72" x2="86" y2="44" stroke="${s}" stroke-width="2.2"/>
+            <line x1="76" y1="57" x2="60" y2="70" stroke="${s}" stroke-width="2.2"/>
+            <line x1="76" y1="57" x2="90" y2="66" stroke="${s}" stroke-width="2.2"/>
+            <text x="75" y="118" text-anchor="middle" font-size="8" fill="${wg}" font-family="sans-serif">neutre</text>
+          </svg>`,
+          `<svg viewBox="0 0 150 120" width="150" height="120">
+            <line x1="10" y1="108" x2="140" y2="108" stroke="${sd}" stroke-width="1.5"/>
+            <circle cx="84" cy="30" r="9" fill="none" stroke="${s}" stroke-width="2.2"/>
+            <line x1="84" y1="39" x2="82" y2="72" stroke="${s}" stroke-width="2.2"/>
+            <line x1="82" y1="72" x2="95" y2="52" stroke="${s}" stroke-width="2.2"/>
+            <line x1="82" y1="88" x2="30" y2="108" stroke="${s}" stroke-width="2.2"/>
+            <line x1="82" y1="72" x2="88" y2="44" stroke="${s}" stroke-width="2.2"/>
+            <line x1="78" y1="57" x2="62" y2="70" stroke="${s}" stroke-width="2.2"/>
+            <line x1="78" y1="57" x2="108" y2="35" stroke="${s}" stroke-width="2.2"/>
+            <text x="110" y="30" font-size="13" fill="${t}">↑</text>
+            <text x="75" y="118" text-anchor="middle" font-size="8" fill="${wg}" font-family="sans-serif">bras vers ciel — expire</text>
+          </svg>`
+        ],
+        "Papillon": [
+          `<svg viewBox="0 0 120 120" width="120" height="120">
+            <line x1="10" y1="108" x2="110" y2="108" stroke="${sd}" stroke-width="1.5"/>
+            <circle cx="60" cy="52" r="9" fill="none" stroke="${s}" stroke-width="2.2"/>
+            <line x1="60" y1="61" x2="60" y2="86" stroke="${s}" stroke-width="2.2"/>
+            <path d="M60 86 Q40 96 28 92" fill="none" stroke="${s}" stroke-width="2.2"/>
+            <path d="M60 86 Q80 96 92 92" fill="none" stroke="${s}" stroke-width="2.2"/>
+            <line x1="60" y1="72" x2="42" y2="82" stroke="${s}" stroke-width="2.2"/>
+            <line x1="60" y1="72" x2="78" y2="82" stroke="${s}" stroke-width="2.2"/>
+            <text x="60" y="118" text-anchor="middle" font-size="8" fill="${wg}" font-family="sans-serif">genoux ouverts</text>
+          </svg>`,
+          `<svg viewBox="0 0 120 120" width="120" height="120">
+            <line x1="10" y1="108" x2="110" y2="108" stroke="${sd}" stroke-width="1.5"/>
+            <circle cx="60" cy="52" r="9" fill="none" stroke="${s}" stroke-width="2.2"/>
+            <line x1="60" y1="61" x2="60" y2="86" stroke="${s}" stroke-width="2.2"/>
+            <path d="M60 86 Q40 100 30 98" fill="none" stroke="${s}" stroke-width="2.2"/>
+            <path d="M60 86 Q80 100 90 98" fill="none" stroke="${s}" stroke-width="2.2"/>
+            <line x1="60" y1="72" x2="40" y2="86" stroke="${s}" stroke-width="2.2"/>
+            <line x1="60" y1="72" x2="80" y2="86" stroke="${s}" stroke-width="2.2"/>
+            <text x="26" y="91" font-size="10" fill="${t}">↓</text>
+            <text x="86" y="91" font-size="10" fill="${t}">↓</text>
+            <text x="60" y="118" text-anchor="middle" font-size="8" fill="${wg}" font-family="sans-serif">coudes pressent</text>
+          </svg>`
+        ],
+        "Demi grand écart": [
+          `<svg viewBox="0 0 160 120" width="160" height="120">
+            <line x1="10" y1="108" x2="150" y2="108" stroke="${sd}" stroke-width="1.5"/>
+            <rect x="112" y="76" width="32" height="5" rx="2" fill="${sd}" stroke="${theme.umber}" stroke-width="1.2"/>
+            <line x1="118" y1="81" x2="118" y2="108" stroke="${theme.umber}" stroke-width="1.2"/>
+            <line x1="138" y1="81" x2="138" y2="108" stroke="${theme.umber}" stroke-width="1.2"/>
+            <circle cx="64" cy="34" r="9" fill="none" stroke="${s}" stroke-width="2.2"/>
+            <line x1="64" y1="43" x2="64" y2="74" stroke="${s}" stroke-width="2.2"/>
+            <line x1="64" y1="74" x2="36" y2="108" stroke="${s}" stroke-width="2.2"/>
+            <line x1="64" y1="74" x2="108" y2="108" stroke="${s}" stroke-width="2.2"/>
+            <line x1="64" y1="56" x2="116" y2="78" stroke="${s}" stroke-width="2.2"/>
+            <line x1="64" y1="56" x2="130" y2="78" stroke="${s}" stroke-width="2.2"/>
+            <text x="78" y="118" text-anchor="middle" font-size="8" fill="${wg}" font-family="sans-serif">glisse progressif</text>
+          </svg>`,
+          `<svg viewBox="0 0 160 120" width="160" height="120">
+            <line x1="10" y1="108" x2="150" y2="108" stroke="${sd}" stroke-width="1.5"/>
+            <rect x="112" y="76" width="32" height="5" rx="2" fill="${sd}" stroke="${theme.umber}" stroke-width="1.2"/>
+            <line x1="118" y1="81" x2="118" y2="108" stroke="${theme.umber}" stroke-width="1.2"/>
+            <line x1="138" y1="81" x2="138" y2="108" stroke="${theme.umber}" stroke-width="1.2"/>
+            <circle cx="60" cy="32" r="9" fill="none" stroke="${s}" stroke-width="2.2"/>
+            <line x1="60" y1="41" x2="60" y2="74" stroke="${s}" stroke-width="2.2"/>
+            <line x1="60" y1="74" x2="22" y2="108" stroke="${s}" stroke-width="2.2"/>
+            <line x1="60" y1="74" x2="110" y2="108" stroke="${s}" stroke-width="2.2"/>
+            <line x1="60" y1="54" x2="116" y2="78" stroke="${s}" stroke-width="2.2"/>
+            <line x1="60" y1="54" x2="130" y2="78" stroke="${s}" stroke-width="2.2"/>
+            <text x="46" y="92" font-size="12" fill="${t}">↓</text>
+            <text x="78" y="118" text-anchor="middle" font-size="8" fill="${wg}" font-family="sans-serif">expire → hanche descend</text>
+          </svg>`
+        ],
+        "Grand écart assisté": [
+          `<svg viewBox="0 0 170 120" width="170" height="120">
+            <line x1="10" y1="108" x2="160" y2="108" stroke="${sd}" stroke-width="1.5"/>
+            <rect x="5" y="76" width="32" height="5" rx="2" fill="${sd}" stroke="${theme.umber}" stroke-width="1.2"/>
+            <line x1="11" y1="81" x2="11" y2="108" stroke="${theme.umber}" stroke-width="1.2"/>
+            <line x1="31" y1="81" x2="31" y2="108" stroke="${theme.umber}" stroke-width="1.2"/>
+            <circle cx="85" cy="35" r="9" fill="none" stroke="${s}" stroke-width="2.2"/>
+            <line x1="85" y1="44" x2="85" y2="82" stroke="${s}" stroke-width="2.2"/>
+            <line x1="85" y1="82" x2="16" y2="108" stroke="${s}" stroke-width="2.8"/>
+            <line x1="85" y1="82" x2="154" y2="108" stroke="${s}" stroke-width="2.8"/>
+            <line x1="85" y1="58" x2="32" y2="78" stroke="${s}" stroke-width="2.2"/>
+            <line x1="85" y1="58" x2="16" y2="78" stroke="${s}" stroke-width="2.2"/>
+            <text x="85" y="118" text-anchor="middle" font-size="8" fill="${wg}" font-family="sans-serif">équilibre via chaise</text>
+          </svg>`,
+          `<svg viewBox="0 0 170 120" width="170" height="120">
+            <line x1="10" y1="108" x2="160" y2="108" stroke="${sd}" stroke-width="1.5"/>
+            <rect x="5" y="74" width="32" height="5" rx="2" fill="${sd}" stroke="${theme.umber}" stroke-width="1.2"/>
+            <line x1="11" y1="79" x2="11" y2="108" stroke="${theme.umber}" stroke-width="1.2"/>
+            <line x1="31" y1="79" x2="31" y2="108" stroke="${theme.umber}" stroke-width="1.2"/>
+            <circle cx="85" cy="33" r="9" fill="none" stroke="${s}" stroke-width="2.2"/>
+            <line x1="85" y1="42" x2="85" y2="84" stroke="${s}" stroke-width="2.2"/>
+            <line x1="85" y1="84" x2="10" y2="108" stroke="${s}" stroke-width="2.8"/>
+            <line x1="85" y1="84" x2="160" y2="108" stroke="${s}" stroke-width="2.8"/>
+            <line x1="85" y1="56" x2="32" y2="76" stroke="${s}" stroke-width="2.2"/>
+            <line x1="85" y1="56" x2="14" y2="76" stroke="${s}" stroke-width="2.2"/>
+            <text x="85" y="92" text-anchor="middle" font-size="8" fill="${t}" font-family="sans-serif">↓ bassin</text>
+            <text x="85" y="118" text-anchor="middle" font-size="8" fill="${wg}" font-family="sans-serif">expire longue — relâche</text>
+          </svg>`
+        ]
+      };
+      return figures[key] || null;
+    }
+
+    /* ── PHASES DATA ── */
+    const phases = [
+      {
+        id: "p1", num: "01", label: "Déverrouillage", duration: "2–3 min",
+        accent: theme.sage, accentPale: theme.sagePale,
+        exercises: [
+          { nom: "Rotation des chevilles & poignets", svgKey: "Rotation chevilles & poignets", duree: "30 sec", reps: "10× / sens", resp: "Libre", erreur: "Ne pas bloquer la respiration" },
+          { nom: "Cercles de hanches debout", svgKey: "Cercles de hanches", duree: "45 sec", reps: "8× / sens", resp: "Expire à l'amplitude max", erreur: "Ne pas cambrer le bas du dos" },
+          { nom: "Chat-Vache lent (à 4 pattes)", svgKey: "Chat-Vache", duree: "45 sec", reps: "8 rép.", resp: "Inspire creux / Expire rond", erreur: "Ne pas précipiter" },
+        ],
+      },
+      {
+        id: "p2", num: "02", label: "Gainage Core", duration: "3–4 min",
+        accent: theme.umber, accentPale: theme.terracottaPale,
+        exercises: [
+          { nom: "Dead Bug (scarabée inversé)", svgKey: "Dead Bug", duree: "40 sec", reps: "6× / côté", resp: "Expire en allongeant", erreur: "Bas du dos ne décolle JAMAIS du sol" },
+          { nom: "Planche avant sur avant-bras", svgKey: "Planche", duree: "45 sec", reps: "2 séries", resp: "Abdominale continue", erreur: "Fesses ni hautes ni basses" },
+          { nom: "Pont fessier isométrique", svgKey: "Pont fessier", duree: "30 sec maintien", reps: "3 séries", resp: "Expire en montant", erreur: "Ne pas creuser les reins" },
+        ],
+      },
+      {
+        id: "p3", num: "03", label: "Grand Écart", duration: "5–6 min",
+        accent: theme.terracotta, accentPale: "#F0D5C8",
+        exercises: [
+          { nom: "Fente basse statique", svgKey: "Fente basse", duree: "45 sec / côté", reps: "2×", resp: "Expire pour aller plus loin", erreur: "Genou avant ≠ dépasse pointe du pied" },
+          { nom: "Fente basse + rotation du tronc", svgKey: "Fente + rotation", duree: "30 sec / côté", reps: "6 rotations", resp: "Inspire neutre, expire en ouvrant", erreur: "Ne pas perdre l'équilibre" },
+          { nom: "Papillon actif", svgKey: "Papillon", duree: "45 sec", reps: "20 rebonds doux", resp: "Expire sur chaque pression", erreur: "Jamais de forçage brutal" },
+          { nom: "Demi grand écart", svgKey: "Demi grand écart", duree: "45–60 sec / côté", reps: "1–2×", resp: "Expire longue", erreur: "Douleur vive = arrêt immédiat" },
+          { nom: "Grand écart assisté", svgKey: "Grand écart assisté", duree: "30–60 sec", reps: "1× fin de séance", resp: "Abdominale longue", erreur: "Bassin droit — ne pas pencher" },
+        ],
+      },
+    ];
+
+    /* ── STATE ── */
+    let activePhase = "p1";
+    const animStates = {}; // key -> { frame, playing, interval }
+
+    /* ── RENDER ── */
+    function renderCards() {
+      const container = document.getElementById("cards-container");
+      const phase = phases.find(p => p.id === activePhase);
+      container.innerHTML = "";
+
+      phase.exercises.forEach((ex, i) => {
+        const frames = svgFrames(ex.svgKey);
+        const cardId = `card-${activePhase}-${i}`;
+        const hasAnim = !!frames;
+
+        const card = document.createElement("div");
+        card.className = "exo-card";
+
+        card.innerHTML = `
+          <div class="exo-left">
+            <div class="exo-tag-row">
+              <span class="exo-phase-badge" style="background:${phase.accentPale};color:${phase.accent};">Phase ${phase.num}</span>
+              <span class="exo-meta">${ex.duree} · ${ex.reps}</span>
+            </div>
+            <h3 class="exo-name">${ex.nom}</h3>
+            <div class="exo-info-row">
+              <div class="info-box info-resp">
+                <p class="info-label">Respiration</p>
+                <p class="info-val">${ex.resp}</p>
+              </div>
+              <div class="info-box info-err">
+                <p class="info-label">Erreur à éviter</p>
+                <p class="info-val">${ex.erreur}</p>
+              </div>
+            </div>
+          </div>
+          <div class="exo-right">
+            ${hasAnim ? `
+            <div class="anim-wrap">
+              <div class="anim-frame" id="frame-${cardId}">${frames[0]}</div>
+              <button class="anim-btn" id="btn-${cardId}" data-id="${cardId}">▶  animer</button>
+            </div>` : ""}
+          </div>
+        `;
+        container.appendChild(card);
+
+        if (hasAnim) {
+          if (!animStates[cardId]) animStates[cardId] = { frame: 0, playing: false, interval: null };
+          const btn = document.getElementById(`btn-${cardId}`);
+          btn.addEventListener("click", () => toggleAnim(cardId, frames));
+        }
+      });
+    }
+
+    function toggleAnim(cardId, frames) {
+      const state = animStates[cardId];
+      const btn = document.getElementById(`btn-${cardId}`);
+      const frameEl = document.getElementById(`frame-${cardId}`);
+      if (state.playing) {
+        clearInterval(state.interval);
+        state.playing = false;
+        btn.textContent = "▶  animer";
+        btn.classList.remove("playing");
+      } else {
+        state.interval = setInterval(() => {
+          state.frame = (state.frame + 1) % 2;
+          frameEl.innerHTML = frames[state.frame];
+        }, 850);
+        state.playing = true;
+        btn.textContent = "⏸  pause";
+        btn.classList.add("playing");
+      }
+    }
+
+    /* ── PHASE BUTTONS ── */
+    document.querySelectorAll(".phase-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        // Stop all animations
+        Object.values(animStates).forEach(st => {
+          if (st.playing) { clearInterval(st.interval); st.playing = false; }
+        });
+
+        activePhase = btn.dataset.phase;
+        const phase = phases.find(p => p.id === activePhase);
+
+        document.querySelectorAll(".phase-btn").forEach(b => {
+          b.classList.remove("active");
+          b.style.background = "var(--sand)";
+          b.style.color = "var(--textSoft)";
+          b.style.borderColor = "var(--sandDark)";
+          b.style.boxShadow = "none";
+          b.querySelector(".dur").style.background = "var(--sandDark)";
+          b.querySelector(".dur").style.color = "var(--warmGrey)";
+        });
+        btn.classList.add("active");
+        btn.style.background = phase.accent;
+        btn.style.color = "#fff";
+        btn.style.borderColor = phase.accent;
+        btn.style.boxShadow = `0 4px 14px ${phase.accent}40`;
+        btn.querySelector(".dur").style.background = "rgba(255,255,255,0.22)";
+        btn.querySelector(".dur").style.color = "#fff";
+
+        renderCards();
+      });
+    });
+
+    /* ── PROGRESSION TOGGLE ── */
+    document.getElementById("prog-toggle").addEventListener("click", () => {
+      const body = document.getElementById("prog-body");
+      const chevron = document.getElementById("prog-chevron");
+      body.classList.toggle("visible");
+      chevron.classList.toggle("open");
+    });
+
+    /* ── INIT ── */
+    renderCards();
+  </script>
+</body>
+</html>
